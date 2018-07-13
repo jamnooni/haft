@@ -54,7 +54,8 @@ public class LearnAdapter extends BaseAdapter {
 
 
         viewHolder.nameTextView.setText(workout.getName());
-        Log.d("debug","meee"+workout.getName());
+        dbHandler.getWorkoutExercises(workout.getName());
+        Log.d("debug","learnadapter.java>>"+workout.getName());
         /*if (dbHandler.findWorkoutHandler(position)!=null) {
             viewHolder.nameTextView.setText(dbHandler.findWorkoutHandler(position).getName());
             Log.d("debug", "meee" + dbHandler.findWorkoutHandler(position).getName());

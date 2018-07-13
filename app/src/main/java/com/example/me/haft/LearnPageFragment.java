@@ -18,7 +18,7 @@ public class LearnPageFragment extends Fragment {
 
         GridView gridView= (GridView) rootView.findViewById(R.id.gridview);
 
-
+        Log.d("debug","learnpagefragment.java>>"+"create new mydbhandler");
         MyDBHandler dbHandler=new MyDBHandler(getContext(),null,null,1);
         try {
             dbHandler.createDataBase();
@@ -43,3 +43,4 @@ public class LearnPageFragment extends Fragment {
         return rootView;
     }
 }
+//TODO: move create handler to onAttach()

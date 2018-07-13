@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class ScreenSlidePagerActivity extends FragmentActivity {
+import java.io.IOException;
+
+public class WorkoutActivity extends FragmentActivity {
 
 
     /**
@@ -29,6 +31,12 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
     private TextView timerTextView;
     private CountDownTimerPausable timer;
 
+    private Integer dExerciseTime=30000;
+    private Integer dRestTime=15000;
+
+    MyDBHandler dbHandler;
+    Exercises exercises;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +48,12 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.addOnPageChangeListener(new PagerChangeListener());
 
         timerTextView = (TextView) findViewById(R.id.timer_text_view);
         timerTextView.setText("" + 10);
 
-        timer = new CountDownTimerPausable(11000, 1000) {
+        timer = new CountDownTimerPausable(dExerciseTime+1, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timerTextView.setText("" + (Math.round(millisUntilFinished*0.001f)-1));
@@ -75,7 +84,19 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
             }
         });
 
-        mPager.addOnPageChangeListener(new PagerChangeListener());
+
+        dbHandler=new MyDBHandler(this,null,null,1);
+        try {
+            dbHandler.createDataBase();
+            dbHandler.openDataBase();
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        String workoutName=getIntent().getStringExtra("workout set");
+        exercises=dbHandler.getWorkoutExercises(workoutName);
+
 
 
     }
@@ -89,8 +110,14 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         }
         @Override
         public void onPageSelected(int position) {
-            timerTextView.setText("" + 10);
-            timer.reset(11000);
+            if (position%2==1) {
+                timerTextView.setText("" + dExerciseTime/1000);
+                timer.reset(dExerciseTime+1);
+            }
+            else{
+                timerTextView.setText("" + dRestTime/1000);
+                timer.reset(dRestTime+1);
+            }
             if (!timer.isPaused()) {
                 timer.start();
             }

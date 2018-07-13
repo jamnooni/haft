@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
+
+    public static String workoutSet="full body";
 
 
     @Override
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         //number of pages
         private static final int NUM_PAGES = 100;
 
+
+
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -49,15 +54,19 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             Bundle args = new Bundle();
             args.putInt("index", position);
+
+
             if (position%2==0){
-                FirstPageFragment fragment=new FirstPageFragment();
-                fragment.setArguments(args);
-                return fragment;
+                FirstPageFragment firstPageFragment=new FirstPageFragment();
+                firstPageFragment.setArguments(args);
+                Log.d("debug","mainactivity.java>> new fragment created");
+                return firstPageFragment;
             }
             else{
-                LearnPageFragment fragment=new LearnPageFragment();
-                fragment.setArguments(args);
-                return fragment;
+                LearnPageFragment learnPageFragment=new LearnPageFragment();
+                learnPageFragment.setArguments(args);
+                Log.d("debug","mainactivity.java>> new fragment created");
+                return learnPageFragment;
             }
         }
 

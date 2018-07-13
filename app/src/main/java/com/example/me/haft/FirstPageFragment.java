@@ -19,7 +19,15 @@ public class FirstPageFragment extends Fragment {
         rootView.findViewById(R.id.workouts_btn).setOnClickListener(new ClickListener(2));
         rootView.findViewById(R.id.circuits_btn).setOnClickListener(new ClickListener(3));
         rootView.findViewById(R.id.voice_over_btn).setOnClickListener(new ClickListener(4));
+        /*MyDBHandler dbHandler=new MyDBHandler(getContext(),null,null,1);
+        try {
+            dbHandler.createDataBase();
+            dbHandler.openDataBase();
 
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }*/
 
         return rootView;
     }
@@ -37,7 +45,8 @@ public class FirstPageFragment extends Fragment {
                 Toast.makeText(getContext(), " " + index, Toast.LENGTH_SHORT).show();
             }
             else{
-                Intent intent=new Intent(getActivity(),ScreenSlidePagerActivity.class);
+                Intent intent=new Intent(getActivity(),WorkoutActivity.class);
+                intent.putExtra("workout set",MainActivity.workoutSet);
                 getActivity().startActivity(intent);
             }
         }

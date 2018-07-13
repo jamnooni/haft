@@ -17,15 +17,17 @@ import java.io.OutputStream;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
+    private static final String DATABASE_NAME = "seven.db";
+    private static final String WORKOUTS_TABLE_NAME = "workouts";
+    private static final String EXERCISES_TABLE_NAME = "exercises";
+    private static final String COLUMN_INDEX = "tbl_index";
+    private static final String COLUMN_NAME = "name";
+    private static final String COLUMN_IconId = "iconId";
+    private static final String COLUMN_ImageId = "imageId";
+    private static final String COLUMN_Description = "description";
+    private static final String EXERCISES_SEQUENCE = "exercises_sequence";
     private static int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "seven6.db";
-    private static final String TABLE_NAME="workouts";
-    private static final String COLUMN_INDEX="workout_index";
-    private static final String COLUMN_NAME="name";
-    private static final String COLUMN_IconId="iconId";
-    private static final String COLUMN_ImageId="imageId";
-    private static final String COLUMN_Description="description";
-    private static String DB_PATH ="";
+    private static String DB_PATH = "";
     private final Context mContext;
     private SQLiteDatabase mDataBase;
 
@@ -33,64 +35,58 @@ public class MyDBHandler extends SQLiteOpenHelper {
             , int version) {
         super(context, "seven.sql", factory, version);
 
-        if(android.os.Build.VERSION.SDK_INT >= 17){
+        Log.d("debug", "MyDBHandler.java   "+"mydbhandler created");
+
+        if (android.os.Build.VERSION.SDK_INT >= 17) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
-        }
-        else
-        {
+        } else {
             DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
         }
         this.mContext = context;
         DATABASE_VERSION++;
-        //Log.d("debug","db version="+String.valueOf(DATABASE_VERSION));
-        //Log.d("debug","DB_PATH="+DB_PATH);
-        //Log.d("debug",mContext.getDatabasePath("seven2.sql").toString());
+        //Log.d("debug","MyDBHandler.java   "+"db version="+String.valueOf(DATABASE_VERSION));
+        //Log.d("debug","MyDBHandler.java   "+"DB_PATH="+DB_PATH);
+        //Log.d("debug","MyDBHandler.java   "+mContext.getDatabasePath("seven2.sql").toString());
     }
 
     /*
      * Creates a empty database on the system and rewrites it with your own database.
      * */
-    public void createDataBase() throws IOException{
+    public void createDataBase() throws IOException {
         //If the database does not exist, copy it from the assets.
 
         boolean mDataBaseExist = checkDataBase();
-        if(!mDataBaseExist)
-        {
+        if (!mDataBaseExist) {
             this.getReadableDatabase();
             this.close();
-            try
-            {
+            try {
                 //Copy the database from assets
                 copyDataBase();
-                //Log.d("debug", "createDatabase database created");
-            }
-            catch (IOException mIOException)
-            {
+                //Log.d("debug", "MyDBHandler.java   "+"createDatabase database created");
+            } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
         }
     }
-    /**
 
+    /**
      * Check if the database already exist to avoid re-copying the file each time you open the
      * application.
+     *
      * @return true if it exists, false if it doesn't
      */
-    private boolean checkDataBase()
-    {
+    private boolean checkDataBase() {
         File dbFile = new File(DB_PATH + DATABASE_NAME);
-        Log.d("debug", dbFile + "exist   "+ dbFile.exists());
+        Log.d("debug", "MyDBHandler.java   "+dbFile + "exist   " + dbFile.exists());
         return dbFile.exists();
     }
 
     /**
-
      * Copies your database from your local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
      * This is done by transferring byte stream.
-     * */
-    private void copyDataBase() throws IOException
-    {
+     */
+    private void copyDataBase() throws IOException {
         //Open your local db as the input stream
         InputStream mInput = mContext.getAssets().open(DATABASE_NAME);
         // Path to the just created empty db
@@ -100,23 +96,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         //transfer bytes from the input file to the output file
         byte[] mBuffer = new byte[1024];
         int mLength;
-        int i=0;
-        while ((mLength = mInput.read(mBuffer))>0)
-        {
+        int i = 0;
+        while ((mLength = mInput.read(mBuffer)) > 0) {
             i++;
             mOutput.write(mBuffer, 0, mLength);
         }
-        Log.d("debug","i="+String.valueOf(i));
+        Log.d("debug", "MyDBHandler.java   "+"i=" + String.valueOf(i));
         //Close the streams
         mOutput.flush();
         mOutput.close();
         mInput.close();
     }
 
-    public boolean openDataBase() throws SQLException{
+    public boolean openDataBase() throws SQLException {
         //Open the database
         String mPath = DB_PATH + DATABASE_NAME;
-        //Log.d("debug", mPath);
+        //Log.d("debug", "MyDBHandler.java   "+mPath);
         mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
         //mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
         return mDataBase != null;
@@ -125,29 +120,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
 
     public synchronized void close() {
-        if(mDataBase != null)
+        if (mDataBase != null)
             mDataBase.close();
         super.close();
     }
 
 
-    public Cursor getTestData()
-    {
-        try
-        {
+    public Cursor getTestData() {
+        try {
 
-            String sql ="SELECT * FROM "+TABLE_NAME;
+            String sql = "SELECT * FROM " + WORKOUTS_TABLE_NAME;
 
             Cursor mCur = mDataBase.rawQuery(sql, null);
-            if (mCur!=null)
-            {
+            if (mCur != null) {
                 mCur.moveToNext();
             }
             return mCur;
-        }
-        catch (SQLException mSQLException)
-        {
-            Log.e("debug", "getTestData >>"+ mSQLException.toString());
+        } catch (SQLException mSQLException) {
+            Log.e("debug", "getTestData >>" + mSQLException.toString());
             throw mSQLException;
         }
     }
@@ -157,8 +147,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor c = mDataBase.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
 
         if (c.moveToFirst()) {
-            while ( !c.isAfterLast() ) {
-                Log.d("debug", "Table Name=> "+c.getString(0));
+            while (!c.isAfterLast()) {
+                Log.d("debug", "MyDBHandler.java   "+"Table Name=> " + c.getString(0));
                 c.moveToNext();
             }
         }
@@ -168,7 +158,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*String CREATE_TABLE="CREATE TABLE "+TABLE_NAME+"("+
+        /*String CREATE_TABLE="CREATE TABLE "+WORKOUTS_TABLE_NAME+"("+
                 COLUMN_INDEX+"INTEGER PRIMARY KEY UNIQUE,"
         +COLUMN_NAME+"VARCHAR,"
         +COLUMN_IconId+"TEXT,"
@@ -184,19 +174,19 @@ public class MyDBHandler extends SQLiteOpenHelper {
             try {
                 //Copy the database from assets
                 copyDataBase();
-                Log.d("debug", "createDatabase database created");
+                Log.d("debug", "MyDBHandler.java   "+"createDatabase database created");
             } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
         }
-        DATABASE_VERSION=newVersion;
+        DATABASE_VERSION = newVersion;
     }
 
     public String loadHandler() {
 
 
         String result = "";
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + WORKOUTS_TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = mDataBase.rawQuery(query, null);
         //Cursor cursor=mDataBase.query(null,null,null,null,null,null,null);
@@ -216,18 +206,20 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_INDEX, workout.getIndex());
         values.put(COLUMN_NAME, workout.getName());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_NAME, null, values);
+        db.insert(WORKOUTS_TABLE_NAME, null, values);
         db.close();
     }
 
-
+    //search in workout table with index. gets first cursor result and sets the name and
+    //index of Workout to be returned.
+    // used for finding workout items in learnPageFragment.
     public Workout findWorkoutHandler(int index) {
         try {
-            String query = "Select * FROM " + TABLE_NAME + " WHERE " +
+            String query = "Select * FROM " + WORKOUTS_TABLE_NAME + " WHERE " +
                     COLUMN_INDEX + "= '" + String.valueOf(index) + "'";
-            //String query = "SELECT * FROM "+TABLE_NAME;
+
             Cursor cursor = mDataBase.rawQuery(query, null);
-            //Cursor cursor=mDataBase.query(null,null,null,null,null,null,null);
+
             Workout workout = new Workout();
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
@@ -239,33 +231,79 @@ public class MyDBHandler extends SQLiteOpenHelper {
             }
             //mDataBase.close();
             return workout;
-        }
-        catch (SQLException mSQLException)
-        {
-            Log.e("debug", "findhandler >>"+ mSQLException.toString());
+        } catch (SQLException mSQLException) {
+            Log.d("debug", "MyDBHandler.java   "+"findhandler >>" + mSQLException.toString());
             throw mSQLException;
         }
     }
 
-    public int countWorkoutsHandler(){
-        String query = "Select * FROM " + TABLE_NAME;
+
+    public Exercises getWorkoutExercises(String workoutName) {
+        char[] sequence;
+        try {
+            String query = "Select " + EXERCISES_SEQUENCE + " FROM " + WORKOUTS_TABLE_NAME
+                    + " WHERE " + COLUMN_NAME + "= '" + workoutName + "'";
+            Cursor cursor = mDataBase.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                sequence = cursor.getString(0).toCharArray();
+            } else {
+                sequence = null;
+            }
+        } catch (SQLException mSQLException) {
+            Log.e("debug", "getWorkoutExercises>> setworkout >>" + mSQLException.toString());
+            throw mSQLException;
+        }
+        Exercises exercises = new Exercises();
+        if (sequence != null && sequence.length > 0) {
+            for (int i = 0; i < sequence.length; i++) {
+                Workout workout = new Workout();
+                try {
+                    String query = "Select * FROM " + EXERCISES_TABLE_NAME
+                            + " WHERE " + COLUMN_INDEX + "= '" + sequence[i] + "'";
+                    Cursor cursor = mDataBase.rawQuery(query, null);
+                    if (cursor.moveToFirst()) {
+                        cursor.moveToFirst();
+                        workout.setIndex(Integer.parseInt(cursor.getString(0)));
+                        workout.setName(cursor.getString(1));
+                        //workout.setDescription(cursor.getString(5));
+                    } else {
+                        workout = null;
+                    }
+                    Log.d("debug", "MyDBHandler.java   "+"getWorkoutExercises" +
+                            ">>exercise name="+workout.getName() );
+                } catch (SQLException mSQLException) {
+                    Log.d("debug", "MyDBHandler.java   "+"getWorkoutExercises" +
+                            ">> findSequence >>" + mSQLException.toString());
+                    throw mSQLException;
+                }
+                if (workout != null) {
+                    exercises.add(workout);
+                }
+            }
+        }
+        return exercises;
+    }
+
+    public int countWorkoutsHandler() {
+        String query = "Select * FROM " + WORKOUTS_TABLE_NAME;
         Cursor cursor = mDataBase.rawQuery(query, null);
         return cursor.getCount();
     }
 
     public boolean deleteHandler(int index) {
         boolean result = false;
-        String query = "Select*FROM" + TABLE_NAME + "WHERE" + COLUMN_INDEX + "= '"
+        String query = "Select*FROM" + WORKOUTS_TABLE_NAME + "WHERE" + COLUMN_INDEX + "= '"
                 + String.valueOf(index) + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         Workout workout = new Workout();
         if (cursor.moveToFirst()) {
             workout.setIndex(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_NAME, COLUMN_INDEX + "=?",
-                    new String[] {
-                String.valueOf(workout.getIndex())
-            });
+            db.delete(WORKOUTS_TABLE_NAME, COLUMN_INDEX + "=?",
+                    new String[]{
+                            String.valueOf(workout.getIndex())
+                    });
             cursor.close();
             result = true;
         }
@@ -279,9 +317,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         ContentValues args = new ContentValues();
         args.put(COLUMN_INDEX, ID);
         args.put(COLUMN_NAME, name);
-        return db.update(TABLE_NAME, args, COLUMN_INDEX + "="
+        return db.update(WORKOUTS_TABLE_NAME, args, COLUMN_INDEX + "="
                 + ID, null) > 0;
     }
 
     //TODO: correct methods names
+    //TODO: fix iconId and ImageId
 }
