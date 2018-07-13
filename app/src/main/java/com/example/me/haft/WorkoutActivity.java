@@ -42,6 +42,21 @@ public class WorkoutActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_screen_slide);
 
+
+        Log.d("debug","workoutactivity.java>>new handler created");
+        dbHandler=new MyDBHandler(this,null,null,1);
+        try {
+            dbHandler.createDataBase();
+            dbHandler.openDataBase();
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        String workoutName=getIntent().getStringExtra("workout set");
+        exercises=dbHandler.getWorkoutExercises(workoutName);
+
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setPageTransformer(true, new DepthPageTransformer());
@@ -85,17 +100,6 @@ public class WorkoutActivity extends FragmentActivity {
         });
 
 
-        dbHandler=new MyDBHandler(this,null,null,1);
-        try {
-            dbHandler.createDataBase();
-            dbHandler.openDataBase();
-
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        String workoutName=getIntent().getStringExtra("workout set");
-        exercises=dbHandler.getWorkoutExercises(workoutName);
 
 
 
@@ -145,6 +149,7 @@ public class WorkoutActivity extends FragmentActivity {
         //number of pages
         private static final int NUM_PAGES = 10;
 
+
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -156,12 +161,17 @@ public class WorkoutActivity extends FragmentActivity {
 
             WorkoutSlidePageFragment fragment = new WorkoutSlidePageFragment();
             fragment.setArguments(args);
+
+            
+            Workout workout=exercises.get(Math.round((position+1)/2));
+            //fragment.setExerciseViews(workout.getName(),workout.getDescription());
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return (2*exercises.size()-1);
+
         }
     }
 
