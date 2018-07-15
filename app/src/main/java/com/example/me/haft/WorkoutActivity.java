@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class WorkoutActivity extends FragmentActivity {
 
     MyDBHandler dbHandler;
     Exercises exercises;
+
+    int finnishedTimes=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +71,25 @@ public class WorkoutActivity extends FragmentActivity {
         timerTextView = (TextView) findViewById(R.id.timer_text_view);
         timerTextView.setText("" + 10);
 
+
+        final View completedDialogLayout=findViewById(R.id.completed_dialog);
+        Button restartBtn= (Button) findViewById(R.id.restart_button);
+        Button doneBtn=(Button)findViewById(R.id.done_button);
+
+        restartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //restart();
+            }
+        });
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //finnish();
+            }
+        });
+
+
         timer = new CountDownTimerPausable(dExerciseTime+1, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -81,11 +103,12 @@ public class WorkoutActivity extends FragmentActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(mPager.getCurrentItem()<mPagerAdapter.getCount()){
+                        if(mPager.getCurrentItem()+1<mPagerAdapter.getCount()){
                             mPager.setCurrentItem(mPager.getCurrentItem()+1);
                         }
                         else {
-                            timerTextView.setText("done!");
+                            completedDialogLayout.setVisibility(View.VISIBLE);
+                            finnishedTimes++;
                         }
                     }
                 },1500);
@@ -114,7 +137,7 @@ public class WorkoutActivity extends FragmentActivity {
         }
         @Override
         public void onPageSelected(int position) {
-            if (position%2==1) {
+            if (position%2==0) {
                 timerTextView.setText("" + dExerciseTime/1000);
                 timer.reset(dExerciseTime+1);
             }
@@ -156,15 +179,25 @@ public class WorkoutActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Workout workout=exercises.get(Math.round((position+1)/2));
+
             Bundle args = new Bundle();
-            args.putInt("index", position);
+            args.putString("name", workout.getName());
+            args.putString("description",workout.getDescription());
+
+            if(position%2==0){
+                args.putBoolean("isRest",false);
+            }
+            else{
+                args.putBoolean("isRest",true);
+            }
 
             WorkoutSlidePageFragment fragment = new WorkoutSlidePageFragment();
             fragment.setArguments(args);
 
-            
-            Workout workout=exercises.get(Math.round((position+1)/2));
-            //fragment.setExerciseViews(workout.getName(),workout.getDescription());
+
+
+
             return fragment;
         }
 

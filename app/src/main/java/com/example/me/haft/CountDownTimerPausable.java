@@ -126,3 +126,5 @@ public abstract class CountDownTimerPausable {
 
 
 }
+
+//TODO: documentation and fix pause and reset

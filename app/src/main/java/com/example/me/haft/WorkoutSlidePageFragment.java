@@ -1,10 +1,8 @@
 package com.example.me.haft;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +11,7 @@ import android.widget.TextView;
 
 public class WorkoutSlidePageFragment extends Fragment {
 
-    TextView NameTextView;
-    TextView descriptionTextView;
-    android.widget.ImageView IconView;
-    ImageView ImageView;
+
 
     @Nullable
     @Override
@@ -28,19 +23,33 @@ public class WorkoutSlidePageFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate
                 (R.layout.workout_slide_page, container, false);
 
-        int index=getArguments().getInt("index");
+        String name=getArguments().getString("name");
+        String description=getArguments().getString("description");
 
+        TextView nameTextView = (TextView) rootView.findViewById(R.id.exercise_name_textView);
+        TextView descriptionTextView= (TextView) rootView.findViewById(R.id.desription_textView);
+        ImageView IconView = (ImageView) rootView.findViewById(R.id.exercise_iconView);
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.exercise_Imageview);
 
-        NameTextView = (TextView) rootView.findViewById(R.id.exercise_name_textView);
-        descriptionTextView= (TextView) rootView.findViewById(R.id.desription_textView);
-        IconView = (ImageView) rootView.findViewById(R.id.exercise_iconView);
-        ImageView = (ImageView) rootView.findViewById(R.id.exercise_Imageview);
+        TextView nameView=(TextView) rootView.findViewById(R.id.exercise_nameView);
 
+        View exerciseLayout=rootView.findViewById(R.id.exercise_layout);
+        View restLayout=rootView.findViewById(R.id.rest_page_layout);
+
+        nameTextView.setText(name);
+        descriptionTextView.setText(description);
+
+        nameView.setText(name);
+
+        if (getArguments().getBoolean("isRest")){
+            exerciseLayout.setVisibility(View.GONE);
+        }
+        else{
+            restLayout.setVisibility(View.GONE);
+        }
         return rootView;
     }
 
-    public void setExerciseViews(String name,String description){
-        NameTextView.setText(name);
-        descriptionTextView.setText(description);
-    }
+    //TODO: unify nameView and nameTextView
+
 }

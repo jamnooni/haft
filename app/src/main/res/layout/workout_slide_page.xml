@@ -4,11 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/exercise_layout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/exercise_name_textView"
+            android:text="exercise name"
+            android:gravity="center"
+            android:textSize="32sp"/>
+
     <ImageView
         android:id="@+id/exercise_Imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/thumb_m"/>
+        android:src="@drawable/thumb_m"
+        android:layout_above="@id/exercise_name_textView"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rest_page_layout"
@@ -63,7 +78,7 @@
                 android:text="next exercise" />
 
             <TextView
-                android:id="@+id/exercise_name_textView"
+                android:id="@+id/exercise_nameView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/next_exercise"
