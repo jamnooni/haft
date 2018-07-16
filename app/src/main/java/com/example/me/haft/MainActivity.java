@@ -1,5 +1,7 @@
 package com.example.me.haft;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -75,4 +77,16 @@ public class MainActivity extends AppCompatActivity {
             return NUM_PAGES;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra("result", 0);
+                Log.d("debug","firstpagefragment.java>>finnished time="+result);
+            }
+        }
+        mPager.setCurrentItem(0);
+    }
+
 }

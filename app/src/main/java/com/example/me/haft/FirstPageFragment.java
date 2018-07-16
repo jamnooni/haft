@@ -1,9 +1,11 @@
 package com.example.me.haft;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,7 @@ public class FirstPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView =inflater.inflate(R.layout.first_page,container,false);
+        View rootView = inflater.inflate(R.layout.first_page, container, false);
 
         rootView.findViewById(R.id.start_btn).setOnClickListener(new ClickListener(1));
         rootView.findViewById(R.id.workouts_btn).setOnClickListener(new ClickListener(2));
@@ -32,23 +34,25 @@ public class FirstPageFragment extends Fragment {
         return rootView;
     }
 
-    private class ClickListener implements View.OnClickListener{
+    private class ClickListener implements View.OnClickListener {
 
         private int index;
+
         public ClickListener(int indext) {
-            this.index=indext;
+            this.index = indext;
         }
 
         @Override
         public void onClick(View view) {
-            if (index!=1) {
+            if (index != 1) {
                 Toast.makeText(getContext(), " " + index, Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Intent intent=new Intent(getActivity(),WorkoutActivity.class);
-                intent.putExtra("workout set",MainActivity.workoutSet);
-                getActivity().startActivity(intent);
+            } else {
+                Intent intent = new Intent(getActivity(), WorkoutActivity.class);
+                intent.putExtra("workout set", MainActivity.workoutSet);
+                getActivity().startActivityForResult(intent, 1);
             }
         }
     }
+
+
 }

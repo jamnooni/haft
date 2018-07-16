@@ -1,5 +1,7 @@
 package com.example.me.haft;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -39,6 +41,7 @@ public class WorkoutActivity extends FragmentActivity {
     Exercises exercises;
 
     int finnishedTimes=0;
+    View completedDialogLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,20 +75,20 @@ public class WorkoutActivity extends FragmentActivity {
         timerTextView.setText("" + 10);
 
 
-        final View completedDialogLayout=findViewById(R.id.completed_dialog);
+        completedDialogLayout=findViewById(R.id.completed_dialog);
         Button restartBtn= (Button) findViewById(R.id.restart_button);
         Button doneBtn=(Button)findViewById(R.id.done_button);
 
         restartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //restart();
+                restartWorkout();
             }
         });
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //finnish();
+                finnishWorkout();
             }
         });
 
@@ -126,6 +129,18 @@ public class WorkoutActivity extends FragmentActivity {
 
 
 
+    }
+
+    private void restartWorkout() {
+        completedDialogLayout.setVisibility(View.GONE);
+        mPager.setCurrentItem(0);
+    }
+
+    private void finnishWorkout() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result",finnishedTimes);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
     public class PagerChangeListener implements ViewPager.OnPageChangeListener {
@@ -210,4 +225,6 @@ public class WorkoutActivity extends FragmentActivity {
 
 
 }
+//TODO: design finnishworkout and block cheating
+//TODO: design starting countdown
 
