@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
+
 public class FirstPageFragment extends Fragment {
     @Nullable
     @Override
@@ -44,13 +46,17 @@ public class FirstPageFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            if (index != 1) {
-                Toast.makeText(getContext(), " " + index, Toast.LENGTH_SHORT).show();
-            } else {
-                Intent intent = new Intent(getActivity(), WorkoutActivity.class);
-                intent.putExtra("workout set", MainActivity.workoutSet);
-                getActivity().startActivityForResult(intent, 1);
+            Intent intent;
+            switch (index){
+                case 1:
+                    intent = new Intent(getActivity(), WorkoutActivity.class);
+                    intent.putExtra("workout set", MainActivity.workoutSet);
+                    getActivity().startActivityForResult(intent, 1);
+                    break;
+                default:
+                    Toast.makeText(getContext(), " " + index, Toast.LENGTH_SHORT).show();
             }
+
         }
     }
 
