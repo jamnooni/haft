@@ -57,8 +57,25 @@ public class MainActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("index", position);
 
+            switch (position%3){
+                case 0:
+                    FirstPageFragment firstPageFragment=new FirstPageFragment();
+                    firstPageFragment.setArguments(args);
+                    Log.d("debug","mainactivity.java>> new fragment created");
+                    return firstPageFragment;
+                case 1:
+                    LearnPageFragment learnPageFragment=new LearnPageFragment();
+                    learnPageFragment.setArguments(args);
+                    Log.d("debug","mainactivity.java>> new fragment created");
+                    return learnPageFragment;
+                case 2:
+                    TrackPageFragment trackPageFragment=new TrackPageFragment();
+                    trackPageFragment.setArguments(args);
+                    Log.d("debug","mainactivity.java>> new fragment created");
+                    return trackPageFragment;
 
-            if (position%2==0){
+            }
+/*            if (position%2==0){
                 FirstPageFragment firstPageFragment=new FirstPageFragment();
                 firstPageFragment.setArguments(args);
                 Log.d("debug","mainactivity.java>> new fragment created");
@@ -69,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 learnPageFragment.setArguments(args);
                 Log.d("debug","mainactivity.java>> new fragment created");
                 return learnPageFragment;
-            }
+            }*/
+            return null;
         }
 
         @Override
