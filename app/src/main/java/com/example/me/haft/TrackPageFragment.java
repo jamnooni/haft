@@ -62,6 +62,10 @@ public class TrackPageFragment extends Fragment{
         pieChart.setDescription(null);
         pieChart.setHoleRadius(80f);
         pieChart.setDrawEntryLabels(false);
+        pieChart.setTouchEnabled(false);
+
+
+
 
 
         Legend legend=pieChart.getLegend();

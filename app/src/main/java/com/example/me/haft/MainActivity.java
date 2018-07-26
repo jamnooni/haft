@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("index", position);
 
-            switch (position%3){
+            switch (position%4){
                 case 0:
                     FirstPageFragment firstPageFragment=new FirstPageFragment();
                     firstPageFragment.setArguments(args);
@@ -73,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
                     trackPageFragment.setArguments(args);
                     Log.d("debug","mainactivity.java>> new fragment created");
                     return trackPageFragment;
-
+                case 3:
+                    AchievementPageFragment achievementPageFragment=new AchievementPageFragment();
+                    achievementPageFragment.setArguments(args);
+                    Log.d("debug","mainactivity.java>> new fragment created");
+                    return achievementPageFragment;
             }
 /*            if (position%2==0){
                 FirstPageFragment firstPageFragment=new FirstPageFragment();
