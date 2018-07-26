@@ -9,7 +9,7 @@
         android:id="@+id/section_title"
         android:text="section title"
         android:textSize="20sp"
-        android:paddingTop="30sp"/>
+        android:paddingTop="20sp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
