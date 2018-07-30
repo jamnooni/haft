@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.IOException;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager mPager;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private PagerAdapter mPagerAdapter;
 
     public static String workoutSet="full body";
+    StatsDBHandler statsDBH;
 
 
     @Override
@@ -36,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
 
         //Workouts workouts=new Workouts();
+
+        Log.d("debug","statspagefragment.java>>"+"create new statsdbhandler");
+        statsDBH=new StatsDBHandler(this,null,null,1);
+        try {
+            statsDBH.createDataBase();
+            statsDBH.openDataBase();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
 
     }
@@ -104,8 +118,14 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                int result = data.getIntExtra("result", 0);
-                Log.d("debug","firstpagefragment.java>>finnished time="+result);
+                int count = data.getIntExtra("result", 0);
+                String workouts="";
+                for (int i=0;i<count;i++){
+                    workouts+="1";
+                }
+                Log.d("debug","update stats, date="+new Date()+"  count="+count+
+                "   workouts="+workouts);
+                statsDBH.addStats(new Date(),count,workouts);
             }
         }
         mPager.setCurrentItem(0);

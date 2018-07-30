@@ -37,7 +37,7 @@ public class WorkoutActivity extends FragmentActivity {
     private Integer dExerciseTime=30000;
     private Integer dRestTime=15000;
 
-    MyDBHandler dbHandler;
+    WorkoutDBHandler dbHandler;
     Exercises exercises;
 
     int finnishedTimes=0;
@@ -50,7 +50,7 @@ public class WorkoutActivity extends FragmentActivity {
 
 
         Log.d("debug","workoutactivity.java>>new handler created");
-        dbHandler=new MyDBHandler(this,null,null,1);
+        dbHandler=new WorkoutDBHandler(this,null,null,1);
         try {
             dbHandler.createDataBase();
             dbHandler.openDataBase();

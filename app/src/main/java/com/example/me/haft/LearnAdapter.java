@@ -12,9 +12,9 @@ import android.widget.TextView;
 public class LearnAdapter extends BaseAdapter {
 
     private final Context context;
-    private final MyDBHandler dbHandler;
+    private final WorkoutDBHandler dbHandler;
 
-    public LearnAdapter(Context context, MyDBHandler dbHandler) {
+    public LearnAdapter(Context context, WorkoutDBHandler dbHandler) {
         this.context = context;
         this.dbHandler=dbHandler;
     }

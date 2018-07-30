@@ -15,13 +15,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-public class MyDBHandler extends SQLiteOpenHelper {
+public class WorkoutDBHandler extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "seven.db";
     private static final String WORKOUTS_TABLE_NAME = "workouts";
     private static final String EXERCISES_TABLE_NAME = "exercises";
-    private static final String COLUMN_INDEX = "tbl_index";
-    private static final String COLUMN_NAME = "name";
+    private static final String INDEX_COLUMN = "tbl_index";
+    private static final String NAME_COLUMN = "name";
     private static final String COLUMN_IconId = "iconId";
     private static final String COLUMN_ImageId = "imageId";
     private static final String COLUMN_Description = "description";
@@ -31,11 +31,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private final Context mContext;
     private SQLiteDatabase mDataBase;
 
-    public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory
+    public WorkoutDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory
             , int version) {
         super(context, "seven.sql", factory, version);
 
-        Log.d("debug", "MyDBHandler.java   "+"mydbhandler created");
+        Log.d("debug", "WorkoutDBHandler.java   "+"workoutdbhandler created");
 
         if (android.os.Build.VERSION.SDK_INT >= 17) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -44,9 +44,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
         this.mContext = context;
         DATABASE_VERSION++;
-        //Log.d("debug","MyDBHandler.java   "+"db version="+String.valueOf(DATABASE_VERSION));
-        //Log.d("debug","MyDBHandler.java   "+"DB_PATH="+DB_PATH);
-        //Log.d("debug","MyDBHandler.java   "+mContext.getDatabasePath("seven2.sql").toString());
+        //TODO:remove version++
+        //Log.d("debug","WorkoutDBHandler.java   "+"db version="+String.valueOf(DATABASE_VERSION));
+        //Log.d("debug","WorkoutDBHandler.java   "+"DB_PATH="+DB_PATH);
+        //Log.d("debug","WorkoutDBHandler.java   "+mContext.getDatabasePath("seven2.sql").toString());
     }
 
     /*
@@ -62,7 +63,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             try {
                 //Copy the database from assets
                 copyDataBase();
-                //Log.d("debug", "MyDBHandler.java   "+"createDatabase database created");
+                //Log.d("debug", "WorkoutDBHandler.java   "+"createDatabase database created");
             } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
@@ -77,7 +78,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
      */
     private boolean checkDataBase() {
         File dbFile = new File(DB_PATH + DATABASE_NAME);
-        Log.d("debug", "MyDBHandler.java   "+dbFile + "exist   " + dbFile.exists());
+        Log.d("debug", "WorkoutDBHandler.java   "+dbFile + "exist   " + dbFile.exists());
         return dbFile.exists();
     }
 
@@ -101,7 +102,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             i++;
             mOutput.write(mBuffer, 0, mLength);
         }
-        Log.d("debug", "MyDBHandler.java   "+"i=" + String.valueOf(i));
+        Log.d("debug", "WorkoutDBHandler.java   "+"i=" + String.valueOf(i));
         //Close the streams
         mOutput.flush();
         mOutput.close();
@@ -111,14 +112,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean openDataBase() throws SQLException {
         //Open the database
         String mPath = DB_PATH + DATABASE_NAME;
-        //Log.d("debug", "MyDBHandler.java   "+mPath);
+        //Log.d("debug", "WorkoutDBHandler.java   "+mPath);
         mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
         //mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
         return mDataBase != null;
     }
 
     @Override
-
     public synchronized void close() {
         if (mDataBase != null)
             mDataBase.close();
@@ -148,7 +148,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
-                Log.d("debug", "MyDBHandler.java   "+"Table Name=> " + c.getString(0));
+                Log.d("debug", "WorkoutDBHandler.java   "+"Table Name=> " + c.getString(0));
                 c.moveToNext();
             }
         }
@@ -159,8 +159,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         /*String CREATE_TABLE="CREATE TABLE "+WORKOUTS_TABLE_NAME+"("+
-                COLUMN_INDEX+"INTEGER PRIMARY KEY UNIQUE,"
-        +COLUMN_NAME+"VARCHAR,"
+                INDEX_COLUMN+"INTEGER PRIMARY KEY UNIQUE,"
+        +NAME_COLUMN+"VARCHAR,"
         +COLUMN_IconId+"TEXT,"
         +COLUMN_ImageId+"TEXT,"
         +COLUMN_Description+"TEXT)";
@@ -174,7 +174,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             try {
                 //Copy the database from assets
                 copyDataBase();
-                Log.d("debug", "MyDBHandler.java   "+"createDatabase database created");
+                Log.d("debug", "WorkoutDBHandler.java   "+"createDatabase database created");
             } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
@@ -203,8 +203,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void addHandler(Workout workout) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_INDEX, workout.getIndex());
-        values.put(COLUMN_NAME, workout.getName());
+        values.put(INDEX_COLUMN, workout.getIndex());
+        values.put(NAME_COLUMN, workout.getName());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(WORKOUTS_TABLE_NAME, null, values);
         db.close();
@@ -212,11 +212,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     //search in workout table with index. gets first cursor result and sets the name and
     //index of Workout to be returned.
-    // used for finding workout items in learnPageFragment.
+    //used for finding workout items in learnPageFragment.
     public Workout findWorkoutHandler(int index) {
         try {
             String query = "Select * FROM " + WORKOUTS_TABLE_NAME + " WHERE " +
-                    COLUMN_INDEX + "= '" + String.valueOf(index) + "'";
+                    INDEX_COLUMN + "= '" + String.valueOf(index) + "'";
 
             Cursor cursor = mDataBase.rawQuery(query, null);
 
@@ -232,17 +232,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
             //mDataBase.close();
             return workout;
         } catch (SQLException mSQLException) {
-            Log.d("debug", "MyDBHandler.java   "+"findhandler >>" + mSQLException.toString());
+            Log.d("debug", "WorkoutDBHandler.java   "+"findhandler >>" + mSQLException.toString());
             throw mSQLException;
         }
     }
 
-
+    //searches in workout table by name. finds the workout. reads exercises_sequences column
+    //searches in exercise table and returns exercises.
     public Exercises getWorkoutExercises(String workoutName) {
         char[] sequence;
         try {
             String query = "Select " + EXERCISES_SEQUENCE + " FROM " + WORKOUTS_TABLE_NAME
-                    + " WHERE " + COLUMN_NAME + "= '" + workoutName + "'";
+                    + " WHERE " + NAME_COLUMN + "= '" + workoutName + "'";
             Cursor cursor = mDataBase.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
@@ -260,7 +261,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 Workout workout = new Workout();
                 try {
                     String query = "Select * FROM " + EXERCISES_TABLE_NAME
-                            + " WHERE " + COLUMN_INDEX + "= '" + sequence[i] + "'";
+                            + " WHERE " + INDEX_COLUMN + "= '" + sequence[i] + "'";
                     Cursor cursor = mDataBase.rawQuery(query, null);
                     if (cursor.moveToFirst()) {
                         cursor.moveToFirst();
@@ -270,10 +271,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     } else {
                         workout = null;
                     }
-                    Log.d("debug", "MyDBHandler.java   "+"getWorkoutExercises" +
-                            ">>exercise name="+workout.getName() );
+                    /*Log.d("debug", "WorkoutDBHandler.java   "+"getWorkoutExercises" +
+                            ">>exercise name="+workout.getName() );*/
                 } catch (SQLException mSQLException) {
-                    Log.d("debug", "MyDBHandler.java   "+"getWorkoutExercises" +
+                    Log.d("debug", "WorkoutDBHandler.java   "+"getWorkoutExercises" +
                             ">> findSequence >>" + mSQLException.toString());
                     throw mSQLException;
                 }
@@ -285,6 +286,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return exercises;
     }
 
+    //returns number of workouts in workout table
     public int countWorkoutsHandler() {
         String query = "Select * FROM " + WORKOUTS_TABLE_NAME;
         Cursor cursor = mDataBase.rawQuery(query, null);
@@ -293,14 +295,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public boolean deleteHandler(int index) {
         boolean result = false;
-        String query = "Select*FROM" + WORKOUTS_TABLE_NAME + "WHERE" + COLUMN_INDEX + "= '"
+        String query = "Select*FROM" + WORKOUTS_TABLE_NAME + "WHERE" + INDEX_COLUMN + "= '"
                 + String.valueOf(index) + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         Workout workout = new Workout();
         if (cursor.moveToFirst()) {
             workout.setIndex(Integer.parseInt(cursor.getString(0)));
-            db.delete(WORKOUTS_TABLE_NAME, COLUMN_INDEX + "=?",
+            db.delete(WORKOUTS_TABLE_NAME, INDEX_COLUMN + "=?",
                     new String[]{
                             String.valueOf(workout.getIndex())
                     });
@@ -315,9 +317,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateHandler(int ID, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues args = new ContentValues();
-        args.put(COLUMN_INDEX, ID);
-        args.put(COLUMN_NAME, name);
-        return db.update(WORKOUTS_TABLE_NAME, args, COLUMN_INDEX + "="
+        args.put(INDEX_COLUMN, ID);
+        args.put(NAME_COLUMN, name);
+        return db.update(WORKOUTS_TABLE_NAME, args, INDEX_COLUMN + "="
                 + ID, null) > 0;
     }
 

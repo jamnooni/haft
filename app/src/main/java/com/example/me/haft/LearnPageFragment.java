@@ -18,21 +18,21 @@ public class LearnPageFragment extends Fragment {
 
         GridView gridView= (GridView) rootView.findViewById(R.id.gridview);
 
-        Log.d("debug","learnpagefragment.java>>"+"create new mydbhandler");
-        MyDBHandler dbHandler=new MyDBHandler(getContext(),null,null,1);
+        Log.d("debug","learnpagefragment.java>>"+"create new wokoutdbhandler");
+        WorkoutDBHandler workoutDBH=new WorkoutDBHandler(getContext(),null,null,1);
         try {
-            dbHandler.createDataBase();
-            dbHandler.openDataBase();
+            workoutDBH.createDataBase();
+            workoutDBH.openDataBase();
 
         }
         catch (IOException e){
             e.printStackTrace();
         }
 
-        LearnAdapter learnAdapter=new LearnAdapter(getContext(),dbHandler);
+        LearnAdapter learnAdapter=new LearnAdapter(getContext(),workoutDBH);
         gridView.setAdapter(learnAdapter);
 
-        Log.d("debug","number of tables="+String.valueOf(dbHandler.countTables()));
+        Log.d("debug","number of tables="+String.valueOf(workoutDBH.countTables()));
         //Log.d("debug","hi  "+dbHandler.getTestData().getString(1));
         //Log.d("debug","he  "+dbHandler.loadHandler());
         //Log.d("debug","ho"+dbHandler.findWorkoutHandler(1).getName());

@@ -37,6 +37,9 @@ public class AchievementPageFragment extends android.support.v4.app.Fragment {
         AchievementsAdapter adapter=new AchievementsAdapter(getActivity(),items);
         listView.setAdapter(adapter);
 
+
+
+
         return rootView;
     }
 }

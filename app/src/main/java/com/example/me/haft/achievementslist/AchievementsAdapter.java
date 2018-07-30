@@ -63,7 +63,6 @@ public class AchievementsAdapter extends BaseAdapter{
         }
         //TODO: decrease inflates
         //TODO: set view clickable
-        Log.d("debug","achvtAdapter.java>>getview called, position:"+position);
         return convertView;
     }
 

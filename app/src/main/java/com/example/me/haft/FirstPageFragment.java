@@ -23,7 +23,7 @@ public class FirstPageFragment extends Fragment {
         rootView.findViewById(R.id.workouts_btn).setOnClickListener(new ClickListener(2));
         rootView.findViewById(R.id.circuits_btn).setOnClickListener(new ClickListener(3));
         rootView.findViewById(R.id.voice_over_btn).setOnClickListener(new ClickListener(4));
-        /*MyDBHandler dbHandler=new MyDBHandler(getContext(),null,null,1);
+        /*WorkoutDBHandler dbHandler=new WorkoutDBHandler(getContext(),null,null,1);
         try {
             dbHandler.createDataBase();
             dbHandler.openDataBase();
