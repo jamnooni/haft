@@ -201,14 +201,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public void addHandler(Workout workout) {
-        ContentValues values = new ContentValues();
-        values.put(INDEX_COLUMN, workout.getIndex());
-        values.put(NAME_COLUMN, workout.getName());
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(WORKOUTS_TABLE_NAME, null, values);
-        db.close();
-    }
+
 
     //search in workout table with index. gets first cursor result and sets the name and
     //index of Workout to be returned.
@@ -291,6 +284,15 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
         String query = "Select * FROM " + WORKOUTS_TABLE_NAME;
         Cursor cursor = mDataBase.rawQuery(query, null);
         return cursor.getCount();
+    }
+
+    public void addHandler(Workout workout) {
+        ContentValues values = new ContentValues();
+        values.put(INDEX_COLUMN, workout.getIndex());
+        values.put(NAME_COLUMN, workout.getName());
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(WORKOUTS_TABLE_NAME, null, values);
+        db.close();
     }
 
     public boolean deleteHandler(int index) {

@@ -35,7 +35,7 @@ public class LearnAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.d("debug","getview called");
+        //Log.d("debug","getview called");
         final Workout workout = dbHandler.findWorkoutHandler(position);
 
         // view holder pattern
@@ -55,7 +55,7 @@ public class LearnAdapter extends BaseAdapter {
 
         viewHolder.nameTextView.setText(workout.getName());
         dbHandler.getWorkoutExercises(workout.getName());
-        Log.d("debug","learnadapter.java>>"+workout.getName());
+        //Log.d("debug","learnadapter.java>>"+workout.getName());
         /*if (dbHandler.findWorkoutHandler(position)!=null) {
             viewHolder.nameTextView.setText(dbHandler.findWorkoutHandler(position).getName());
             Log.d("debug", "meee" + dbHandler.findWorkoutHandler(position).getName());

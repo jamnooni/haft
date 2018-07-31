@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
     }
 
 
@@ -75,22 +76,22 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     FirstPageFragment firstPageFragment=new FirstPageFragment();
                     firstPageFragment.setArguments(args);
-                    Log.d("debug","mainactivity.java>> new fragment created");
+                    //Log.d("debug","mainactivity.java>> new fragment created");
                     return firstPageFragment;
                 case 1:
                     LearnPageFragment learnPageFragment=new LearnPageFragment();
                     learnPageFragment.setArguments(args);
-                    Log.d("debug","mainactivity.java>> new fragment created");
+                    //Log.d("debug","mainactivity.java>> new fragment created");
                     return learnPageFragment;
                 case 2:
                     TrackPageFragment trackPageFragment=new TrackPageFragment();
                     trackPageFragment.setArguments(args);
-                    Log.d("debug","mainactivity.java>> new fragment created");
+                    //Log.d("debug","mainactivity.java>> new fragment created");
                     return trackPageFragment;
                 case 3:
                     AchievementPageFragment achievementPageFragment=new AchievementPageFragment();
                     achievementPageFragment.setArguments(args);
-                    Log.d("debug","mainactivity.java>> new fragment created");
+                    //Log.d("debug","mainactivity.java>> new fragment created");
                     return achievementPageFragment;
             }
 /*            if (position%2==0){
@@ -125,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Log.d("debug","update stats, date="+new Date()+"  count="+count+
                 "   workouts="+workouts);
-                statsDBH.addStats(new Date(),count,workouts);
+
+                statsDBH.updateStats(new Date(),workouts);
             }
         }
         mPager.setCurrentItem(0);

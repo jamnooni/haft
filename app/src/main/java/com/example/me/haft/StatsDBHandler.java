@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StatsDBHandler extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "statistic.db";
+    private static final String DATABASE_NAME = "daeee.db";
     private static final String STATS_TABLE_NAME = "statistic";
     private static final String INDEX_COLUMN = "tbl_index";
     private static final String DATE_COLUMN = "date";
@@ -146,19 +146,21 @@ public class StatsDBHandler extends SQLiteOpenHelper {
     public int getCircuitsCount(Date date) {
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
         String strDate=dateFormat.format(date);
-        Log.d("debug","statsDBHandler.java>>recieved date="+strDate);
+
         try {
-            String query = "Select "+COUNT_COLUMN+" FROM " + STATS_TABLE_NAME + " WHERE " +
+            String query = "Select "+WORKOUTS_COLUMN+" FROM " + STATS_TABLE_NAME + " WHERE " +
                     DATE_COLUMN + "= '" + strDate + "'";
 
             Cursor cursor = mDataBase.rawQuery(query, null);
             int count=0;
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
-                count=cursor.getInt(0);
+                count=(cursor.getString(0)).length();
+                Log.d("debug","statsDBHandler.java>>date="+strDate+" count="+count);
                 cursor.close();
             }
             //mDataBase.close();
+
             return count;
         } catch (SQLException mSQLException) {
             Log.d("debug", "StatsDBHandler.java>>"+"findhandler >>"+ mSQLException.toString());
@@ -166,7 +168,7 @@ public class StatsDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addStats(Date date,int count,String workouts) {
+    public void updateStats(Date date, String workouts) {
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
         String strDate=dateFormat.format(date);
         ContentValues values=new ContentValues();
@@ -180,27 +182,22 @@ public class StatsDBHandler extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
                 values.put(WORKOUTS_COLUMN,cursor.getString(2)+workouts);
-                values.put(COUNT_COLUMN,cursor.getInt(3)+count);
                 mDataBase.update(STATS_TABLE_NAME,values,
-                        "where "+INDEX_COLUMN+"= "+cursor.getInt(1),null);
+                        INDEX_COLUMN+"="+cursor.getInt(0),null);
                 cursor.close();
-                Log.d("debug","updatedstats"+getCircuitsCount(date));
+            }
+            else{
+                values.put(DATE_COLUMN,strDate);
+                values.put(WORKOUTS_COLUMN,workouts);
+                mDataBase.insert(STATS_TABLE_NAME,null,values);
             }
             //mDataBase.close();
 
         } catch (SQLException mSQLException) {
-            Log.d("debug", "StatsDBHandler.java>>"+"findhandler >>"+ mSQLException.toString());
+            Log.d("debug", "StatsDBHandler.java>>"+"findhandler>>"+ mSQLException.toString());
             throw mSQLException;
         }
 
-
-
-        /*ContentValues values = new ContentValues();
-        values.put(INDEX_COLUMN, workout.getIndex());
-        values.put(NAME_COLUMN, workout.getName());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(WORKOUTS_TABLE_NAME, null, values);*/
     }
 
     //TODO: endtransaction? dbclose?
