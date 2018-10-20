@@ -13,6 +13,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static String workoutSet="full body";
     StatsDBHandler statsDBH;
+
+    enum DaysOfWeek {Sun,Mon,Tue,Wed,Thu,Fri,Sat}
+    Calendar calendar;
+    int[] lineChartY=new int[7];
+    String[] strDaysOfWeek =new String[7];
+
 
 
     @Override
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        prepareChartsData();
 
 
     }
@@ -69,43 +77,37 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Bundle args = new Bundle();
-            args.putInt("index", position);
+
 
             switch (position%4){
                 case 0:
                     FirstPageFragment firstPageFragment=new FirstPageFragment();
-                    firstPageFragment.setArguments(args);
+                    //firstPageFragment.setArguments(args);
                     //Log.d("debug","mainactivity.java>> new fragment created");
                     return firstPageFragment;
                 case 1:
                     LearnPageFragment learnPageFragment=new LearnPageFragment();
-                    learnPageFragment.setArguments(args);
+                    //learnPageFragment.setArguments(args);
                     //Log.d("debug","mainactivity.java>> new fragment created");
                     return learnPageFragment;
                 case 2:
                     TrackPageFragment trackPageFragment=new TrackPageFragment();
+
+                    Bundle args = new Bundle();
+                    args.putInt("index", position);
+                    args.putIntArray("lineChartY",lineChartY);
+                    args.putStringArray("strDaysOfWeek", strDaysOfWeek);
+                    args.putFloat("pieChartPercent",18.5f);
                     trackPageFragment.setArguments(args);
                     //Log.d("debug","mainactivity.java>> new fragment created");
                     return trackPageFragment;
                 case 3:
                     AchievementPageFragment achievementPageFragment=new AchievementPageFragment();
-                    achievementPageFragment.setArguments(args);
+                    //achievementPageFragment.setArguments(args);
                     //Log.d("debug","mainactivity.java>> new fragment created");
                     return achievementPageFragment;
             }
-/*            if (position%2==0){
-                FirstPageFragment firstPageFragment=new FirstPageFragment();
-                firstPageFragment.setArguments(args);
-                Log.d("debug","mainactivity.java>> new fragment created");
-                return firstPageFragment;
-            }
-            else{
-                LearnPageFragment learnPageFragment=new LearnPageFragment();
-                learnPageFragment.setArguments(args);
-                Log.d("debug","mainactivity.java>> new fragment created");
-                return learnPageFragment;
-            }*/
+
             return null;
         }
 
@@ -128,9 +130,27 @@ public class MainActivity extends AppCompatActivity {
                 "   workouts="+workouts);
 
                 statsDBH.updateStats(new Date(),workouts);
+                prepareChartsData();
             }
         }
         mPager.setCurrentItem(0);
     }
 
+    private void prepareChartsData(){
+        calendar=Calendar.getInstance();
+        calendar.getTime();
+        calendar.add(Calendar.DATE,-6);
+        Date date;
+
+        for (int i=0;i<7;i++){
+            date=calendar.getTime();
+            lineChartY[i]=statsDBH.getCircuitsCount(date);
+            strDaysOfWeek[i]=DaysOfWeek.values()[calendar.get(Calendar.DAY_OF_WEEK)-1].name();
+            calendar.add(Calendar.DATE,1);
+        }
+    }
+
 }
+
+//TODO:settings page, complete learn page & track page, activities of circuits, workouts & calendar
+//TODO: Hearts & progress rules, complete database, design graphics

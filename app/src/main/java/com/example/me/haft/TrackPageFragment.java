@@ -2,6 +2,7 @@ package com.example.me.haft;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -43,42 +44,30 @@ public class TrackPageFragment extends Fragment{
 
 
         Log.d("debug","statspagefragment.java>>"+"create new statsdbhandler");
-        StatsDBHandler statsDBH=new StatsDBHandler(getContext(),null,null,1);
-        try {
-            statsDBH.createDataBase();
-            statsDBH.openDataBase();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+
+        Bundle bundle=getArguments();
+        String[] strDaysOfWeek=bundle.getStringArray("strDaysOfWeek");
+        int[] lineChartY=bundle.getIntArray("lineChartY");
 
         List<Entry> lineEntries=new ArrayList<>();
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.getTime();
-        calendar.add(Calendar.DATE,-6);
-        Date date;
-
-        String[] strDaysofWeek=new String[7];
         for (int i=0;i<7;i++){
-            date=calendar.getTime();
-            lineEntries.add(new Entry(i,statsDBH.getCircuitsCount(date)));
-            strDaysofWeek[i]=DaysOfWeek.values()[calendar.get(Calendar.DAY_OF_WEEK)-1].name();
-            calendar.add(Calendar.DATE,1);
+            lineEntries.add(new Entry(i,lineChartY[i]));
         }
 
         LineChart lineChart= (LineChart) rootView.findViewById(R.id.line_chart);
 
 
-        initializeLineChart(lineChart,lineEntries,strDaysofWeek);
-        Log.d("debug","date="+new Date()+",count="+statsDBH.getCircuitsCount(new Date()));
+        initializeLineChart(lineChart,lineEntries,strDaysOfWeek);
+
 
         PieChart pieChart= (PieChart) rootView.findViewById(R.id.pie_chart);
 
         List<PieEntry> pieEntries = new ArrayList<>();
 
-        pieEntries.add(new PieEntry(18.5f, "done"));
-        pieEntries.add(new PieEntry(81.5f, "remaining"));
+        float pieChartPercent=getArguments().getFloat("pieChartPercent");
+        pieEntries.add(new PieEntry(pieChartPercent, "done"));
+        pieEntries.add(new PieEntry(100-pieChartPercent, "remaining"));
 
         initializePieChart(pieChart,pieEntries);
 

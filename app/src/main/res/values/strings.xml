@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">haft</string>
+    <string name="settings_general">GENERAL</string>
+    <string name="settings_reminder">REMINDERS</string>
+    <string name="settings_sounds">SOUNDS</string>
+    <string name="settings_vibration">VIBRATION</string>
+    <string name="settings_workout">WORKOUTS</string>
+    <string name="settings_intervals">INTERVALS</string>
+    <string name="settings_time">TIME</string>
+    <string name="settings_randomize">RANDOMIZE</string>
+    <string name="settings_purchases">PURCHASES</string>
+    <string name="hearts">HEARTS</string>
+    <string name="instructors">INSTRUCTORS</string>
+    <string name="workouts">WORKOUTS</string>
+    <string name="lost_a_heart">LOST A HEART</string>
+    <string name="reminder">REMINDER</string>
+    <string name="every_day">EVERY DAY</string>
+    <string name="time">TIME</string>
+    <string name="text">TEXT</string>
+    <string name="when_im_lazy">WHEN I\'M LAZY</string>
+    <string name="general">GENERAL</string>
+    <string name="instructor">INSTRUCTOR</string>
+    <string name="volume">VOLUME</string>
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    <string name="settings_sounds_note">Turn off your mute switch and set the sound level of your device before adjusting it in Seven</string>
+    <string name="exercise">EXERCISE</string>
+    <string name="sec">Sec</string>
+    <string name="rest">REST</string>
+    <string name="reset">RESET</string>
+    <string name="defalt">DEFAULT</string>
+    <string name="settings_intervals_note">It\'s recommended to use the default intervals that match scientific study</string>
+    <string name="seven_version">seven 1.3.4</string>
+    <string name="trademark_text">® 2018 perigee</string>
 </resources>

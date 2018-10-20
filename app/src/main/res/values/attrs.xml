@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SeekbarPreference">
+        <attr name="addText" format="string"/>
+        <attr name="defaultVal" format="integer"/>
+        <attr name="minVal" format="integer"/>
+        <attr name="maxVal" format="integer"/>
+        <attr name="step" format="integer"/>
+    </declare-styleable>
+
+</resources>

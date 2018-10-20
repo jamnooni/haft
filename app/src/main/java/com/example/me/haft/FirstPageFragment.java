@@ -53,6 +53,9 @@ public class FirstPageFragment extends Fragment {
                     intent.putExtra("workout set", MainActivity.workoutSet);
                     getActivity().startActivityForResult(intent, 1);
                     break;
+                case 4:
+                    intent=new Intent(getActivity(),SettingsActivity.class);
+                    getActivity().startActivity(intent);
                 default:
                     Toast.makeText(getContext(), " " + index, Toast.LENGTH_SHORT).show();
             }

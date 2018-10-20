@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/settings_general">
+        <PreferenceScreen android:title="@string/reminder">
+            <PreferenceCategory android:title="@string/lost_a_heart">
+                <SwitchPreference
+                    android:key="lost_heart_reminder_switch"
+                    android:title="@string/reminder"></SwitchPreference>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/every_day">
+                <SwitchPreference
+                    android:key="every_day_reminder"
+                    android:title="@string/reminder">
+
+                </SwitchPreference>
+
+                <com.example.me.haft.utils.TimePreference
+                    android:key="every_day_reminder_time"
+                    android:summary=" "
+                    android:title="@string/time">
+
+                </com.example.me.haft.utils.TimePreference>
+
+                <EditTextPreference
+                    android:key="every_day_reminder_text"
+                    android:summary=" "
+                    android:title="@string/text">
+
+                </EditTextPreference>
+
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/when_im_lazy">
+                <SwitchPreference
+                    android:key="lazy_reminder_switch"
+                    android:title="@string/reminder">
+
+                </SwitchPreference>
+
+                <com.example.me.haft.utils.TimePreference
+                    android:key="lazy_reminder_time"
+                    android:summary=" "
+                    android:title="@string/time">
+
+                </com.example.me.haft.utils.TimePreference>
+                <EditTextPreference
+                    android:key="lazy_reminder_text"
+                    android:summary=" "
+                    android:title="@string/text">
+
+                </EditTextPreference>
+            </PreferenceCategory>
+        </PreferenceScreen>
+
+        <PreferenceScreen android:title="@string/settings_sounds">
+            <PreferenceCategory android:title="@string/general">
+                <SwitchPreference
+                    android:key="instructor_sound_switch"
+                    android:title="@string/instructor">
+
+                </SwitchPreference>
+                <com.example.me.haft.utils.SeekbarPreference
+                    android:key="sound_volume"
+                    android:summary=" "
+                    android:title="@string/volume"
+                    app:addText="%"
+                    app:minVal="0"
+                    app:maxVal="100"
+                    app:step="10"
+                    app:defaultVal="50">
+
+                </com.example.me.haft.utils.SeekbarPreference>
+                <Preference
+                    android:layout="@layout/settings_sounds_note"
+                    android:selectable="false">
+
+                </Preference>
+            </PreferenceCategory>
+        </PreferenceScreen>
+
+        <SwitchPreference
+            android:key="vibration_switch"
+            android:title="@string/settings_vibration">
+
+        </SwitchPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/workouts">
+        <PreferenceScreen android:title="@string/settings_intervals">
+            <PreferenceCategory android:title="@string/time">
+                <com.example.me.haft.utils.SeekbarPreference
+                    android:title="@string/exercise"
+                    app:addText="@string/sec"
+                    app:defaultVal="30"
+                    android:key="exercise_time"
+                    app:minVal="15"
+                    app:maxVal="90"
+                    app:step="5"
+                    android:summary=" ">
+
+                </com.example.me.haft.utils.SeekbarPreference>
+                <com.example.me.haft.utils.SeekbarPreference
+                    android:title="@string/rest"
+                    app:addText="@string/sec"
+                    app:defaultVal="10"
+                    android:key="rest_time"
+                    app:minVal="5"
+                    app:maxVal="30"
+                    app:step="5"
+                    android:summary=" ">
+
+                </com.example.me.haft.utils.SeekbarPreference>
+
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/reset">
+                <Preference android:layout="@layout/default_button_layout">
+
+                </Preference>
+                <Preference android:layout="@layout/settings_intervals_note"
+                    android:selectable="false">
+
+                </Preference>
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+        <SwitchPreference
+            android:key="randomize_switch"
+            android:title="@string/settings_randomize">
+
+        </SwitchPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_purchases">
+        <Preference android:title="@string/hearts">
+
+        </Preference>
+        <Preference android:title="@string/instructors">
+
+        </Preference>
+        <Preference android:title="@string/workouts">
+
+        </Preference>
+
+    </PreferenceCategory>
+
+    <Preference android:layout="@layout/settings_trademark">
+
+    </Preference>
+
+</PreferenceScreen>
