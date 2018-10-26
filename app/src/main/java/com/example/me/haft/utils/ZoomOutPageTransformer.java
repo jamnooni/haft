@@ -1,4 +1,4 @@
-package com.example.me.haft;
+package com.example.me.haft.utils;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

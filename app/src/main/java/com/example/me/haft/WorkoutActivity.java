@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.me.haft.utils.DepthPageTransformer;
+
 import java.io.IOException;
 
 public class WorkoutActivity extends FragmentActivity {
@@ -38,8 +40,8 @@ public class WorkoutActivity extends FragmentActivity {
     private Integer dRestTime=15000;
 
     WorkoutDBHandler dbHandler;
-    Exercises exercises;
-
+    WorkoutSet workoutSet;
+    int internet;
     int finnishedTimes=0;
     View completedDialogLayout;
 
@@ -61,7 +63,7 @@ public class WorkoutActivity extends FragmentActivity {
         }
 
         String workoutName=getIntent().getStringExtra("workout set");
-        exercises=dbHandler.getWorkoutExercises(workoutName);
+        workoutSet =dbHandler.getWorkoutSet(workoutName);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -143,6 +145,7 @@ public class WorkoutActivity extends FragmentActivity {
         finish();
     }
 
+    //pager change listener. sets timer and textView value.
     public class PagerChangeListener implements ViewPager.OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -194,7 +197,7 @@ public class WorkoutActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Workout workout=exercises.get(Math.round((position+1)/2));
+            Workout workout= workoutSet.get(Math.round((position+1)/2));
 
             Bundle args = new Bundle();
             args.putString("name", workout.getName());
@@ -218,7 +221,7 @@ public class WorkoutActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return (2*exercises.size()-1);
+            return (2* workoutSet.size()-1);
 
         }
     }

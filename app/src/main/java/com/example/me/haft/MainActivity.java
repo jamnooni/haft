@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.me.haft.utils.DepthPageTransformer;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Calendar;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
 
-        //Workouts workouts=new Workouts();
 
         Log.d("debug","statspagefragment.java>>"+"create new statsdbhandler");
         statsDBH=new StatsDBHandler(this,null,null,1);

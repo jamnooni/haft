@@ -231,12 +231,12 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
     }
 
     //searches in workout table by name. finds the workout. reads exercises_sequences column
-    //searches in exercise table and returns exercises.
-    public Exercises getWorkoutExercises(String workoutName) {
+    //searches in exercise table and returns workoutSet.
+    public WorkoutSet getWorkoutSet(String workoutSetName) {
         char[] sequence;
         try {
             String query = "Select " + EXERCISES_SEQUENCE + " FROM " + WORKOUTS_TABLE_NAME
-                    + " WHERE " + NAME_COLUMN + "= '" + workoutName + "'";
+                    + " WHERE " + NAME_COLUMN + "= '" + workoutSetName + "'";
             Cursor cursor = mDataBase.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
@@ -245,39 +245,79 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
                 sequence = null;
             }
         } catch (SQLException mSQLException) {
-            Log.e("debug", "getWorkoutExercises>> setworkout >>" + mSQLException.toString());
+            Log.e("debug", "getWorkoutSet>> setworkout >>" + mSQLException.toString());
             throw mSQLException;
         }
-        Exercises exercises = new Exercises();
+        WorkoutSet workoutSet = new WorkoutSet();
         if (sequence != null && sequence.length > 0) {
             for (int i = 0; i < sequence.length; i++) {
-                Workout workout = new Workout();
-                try {
-                    String query = "Select * FROM " + EXERCISES_TABLE_NAME
-                            + " WHERE " + INDEX_COLUMN + "= '" + sequence[i] + "'";
-                    Cursor cursor = mDataBase.rawQuery(query, null);
-                    if (cursor.moveToFirst()) {
-                        cursor.moveToFirst();
-                        workout.setIndex(Integer.parseInt(cursor.getString(0)));
-                        workout.setName(cursor.getString(1));
-                        //workout.setDescription(cursor.getString(5));
-                    } else {
-                        workout = null;
-                    }
-                    /*Log.d("debug", "WorkoutDBHandler.java   "+"getWorkoutExercises" +
-                            ">>exercise name="+workout.getName() );*/
-                } catch (SQLException mSQLException) {
-                    Log.d("debug", "WorkoutDBHandler.java   "+"getWorkoutExercises" +
-                            ">> findSequence >>" + mSQLException.toString());
-                    throw mSQLException;
-                }
+                Workout workout = getWorkout(Integer.parseInt(String.valueOf(sequence[i])));
                 if (workout != null) {
-                    exercises.add(workout);
+                    workoutSet.add(workout);
                 }
             }
         }
-        return exercises;
+        return workoutSet;
     }
+
+
+    public WorkoutSet getWorkoutSet(int workoutSetIndex) {
+        char[] sequence;
+        try {
+            String query = "Select " + EXERCISES_SEQUENCE + " FROM " + WORKOUTS_TABLE_NAME
+                    + " WHERE " + INDEX_COLUMN + "= '" + workoutSetIndex + "'";
+            Cursor cursor = mDataBase.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                sequence = cursor.getString(0).toCharArray();
+            } else {
+                sequence = null;
+            }
+        } catch (SQLException mSQLException) {
+            Log.e("debug", "getWorkoutSet>> setworkout >>" + mSQLException.toString());
+            throw mSQLException;
+        }
+        WorkoutSet workoutSet = new WorkoutSet();
+        if (sequence != null && sequence.length > 0) {
+            for (int i = 0; i < sequence.length; i++) {
+                Workout workout = getWorkout(Integer.parseInt(String.valueOf(sequence[i])));
+
+                if (workout != null) {
+                    workoutSet.add(workout);
+                }
+            }
+        }
+        return workoutSet;
+    }
+
+    public Workout getWorkout(int index){
+        Workout workout = new Workout();
+        try {
+            String query = "Select * FROM " + EXERCISES_TABLE_NAME
+                    + " WHERE " + INDEX_COLUMN + "= '" + index + "'";
+            Cursor cursor = mDataBase.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                workout.setIndex(Integer.parseInt(cursor.getString(0)));
+                workout.setName(cursor.getString(1));
+                if (cursor.getString(2)!=null)
+                    workout.setIconId(Integer.parseInt(cursor.getString(2)));
+                if (cursor.getString(3)!=null)
+                    workout.setImageId(Integer.parseInt(cursor.getString(3)));
+                workout.setDescription(cursor.getString(4));
+            } else {
+                workout = null;
+            }
+        } catch (SQLException mSQLException) {
+            Log.d("debug", "WorkoutDBHandler.java   "+"getWorkoutSet" +
+                    ">> findSequence >>" + mSQLException.toString());
+            throw mSQLException;
+        }
+        return workout;
+    }
+    
+    
+    
 
     //returns number of workouts in workout table
     public int countWorkoutsHandler() {

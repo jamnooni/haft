@@ -1,6 +1,7 @@
 package com.example.me.haft;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,23 +9,33 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class LearnAdapter extends BaseAdapter {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    private final Context context;
-    private final WorkoutDBHandler dbHandler;
+public class LearnGridAdapter extends BaseAdapter {
 
-    public LearnAdapter(Context context, WorkoutDBHandler dbHandler) {
-        this.context = context;
-        this.dbHandler=dbHandler;
+    List<String> names;
+    List<Integer> iconIds=new ArrayList<>();
+    Context context;
+
+    public LearnGridAdapter(Context context, String[] names, int[] iconIds) {
+        this.names= Arrays.asList(names);
+        for (int i:iconIds){
+            this.iconIds.add(i);
+        }
+        this.context=context;
     }
 
     @Override
     public int getCount() {
-        return dbHandler.countWorkoutsHandler();
+        return names.size();
     }
 
     @Override
-    public Object getItem(int i) {return null;}
+    public Object getItem(int i) {
+        return null;
+    }
 
     @Override
     public long getItemId(int i) {
@@ -32,10 +43,7 @@ public class LearnAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        //Log.d("debug","getview called");
-        final Workout workout = dbHandler.findWorkoutHandler(position);
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
 
         // view holder pattern
         if (convertView == null) {
@@ -50,24 +58,11 @@ public class LearnAdapter extends BaseAdapter {
 
         final ViewHolder viewHolder=(ViewHolder) convertView.getTag();
 
-
-
-        viewHolder.nameTextView.setText(workout.getName());
-        dbHandler.getWorkoutSet(workout.getName());
-        //Log.d("debug","learnadapter.java>>"+workout.getName());
-        /*if (dbHandler.findWorkoutHandler(position)!=null) {
-            viewHolder.nameTextView.setText(dbHandler.findWorkoutHandler(position).getName());
-            Log.d("debug", "meee" + dbHandler.findWorkoutHandler(position).getName());
-        }*/
-        //viewHolder.iconImageView.setImageDrawable(null);
-
+        viewHolder.nameTextView.setText(names.get(i));
+        //viewHolder.iconImageView.setImageResource(iconIds.get(i));
 
 
         return convertView;
-
-        //TODO: how baseAdapter getview() works?
-        //TODO: how viewholder reduce size?
-
     }
 
     private class ViewHolder {
@@ -80,4 +75,3 @@ public class LearnAdapter extends BaseAdapter {
         }
     }
 }
-
