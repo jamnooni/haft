@@ -34,35 +34,27 @@ public class LearnPagerFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.learn_pager_layout,container,false);
 
+        //get viewPager view
         viewPager= (ViewPager) rootView.findViewById(R.id.pager);
 
 
+        //set adapter
         viewPager.setAdapter(new ScreenSlidePagerAdapter(getFragmentManager()));
 
+        //set page change listener
         viewPager.addOnPageChangeListener(new PagerChangeListener());
 
-
+        //get title view
         textView= (TextView) rootView.findViewById(R.id.textView);
 
+        //show selected slide
+        viewPager.setCurrentItem(selectedIndex);
 
-
-        //insure completion of createView
-        setData(workoutSet,selectedIndex);
 
         return rootView;
     }
 
 
-
-    public void setData(WorkoutSet workoutSet,int selectedIndex){
-        Log.d("debug","getView is null? "+(getView()==null));
-        if (workoutSet!=null) {
-            this.workoutSet = workoutSet;
-            this.selectedIndex = selectedIndex;
-
-            viewPager.setCurrentItem(selectedIndex);
-        }
-    }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -92,7 +84,6 @@ public class LearnPagerFragment extends Fragment{
         @Override
         public int getCount() {
             return workoutSet.size();
-
         }
     }
 
@@ -102,8 +93,7 @@ public class LearnPagerFragment extends Fragment{
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
         @Override
         public void onPageSelected(int position) {
-            textView.setText("Exercise"+" "+position+" "
-                    +getString(R.string.of)+" "+workoutSet.size());
+            textView.setText(String.format("Excercise %d of %d",position+1,workoutSet.size()));
         }
         @Override
         public void onPageScrollStateChanged(int state) {}

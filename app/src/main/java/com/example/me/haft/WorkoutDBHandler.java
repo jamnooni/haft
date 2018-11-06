@@ -231,7 +231,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
     }
 
     //searches in workout table by name. finds the workout. reads exercises_sequences column
-    //searches in exercise table and returns workoutSet.
+    //gets exercises from exercise table by calling getWorkout() and returns workoutSet.
     public WorkoutSet getWorkoutSet(String workoutSetName) {
         char[] sequence;
         try {
@@ -260,7 +260,8 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
         return workoutSet;
     }
 
-
+    //searches in workout table by index. finds the workout. reads exercises_sequences column
+    //gets exercises from exercise table by calling getWorkout() and returns workoutSet.
     public WorkoutSet getWorkoutSet(int workoutSetIndex) {
         char[] sequence;
         try {
@@ -290,6 +291,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
         return workoutSet;
     }
 
+    //searches the exercise table by index and returns workout
     public Workout getWorkout(int index){
         Workout workout = new Workout();
         try {
@@ -315,8 +317,31 @@ public class WorkoutDBHandler extends SQLiteOpenHelper {
         }
         return workout;
     }
-    
-    
+
+
+    //searches workout table and returns a workoutSet of all of its items
+    public WorkoutSet getWorkoutSets() {
+        try {
+            String query = "Select * FROM " + WORKOUTS_TABLE_NAME;
+            Cursor cursor = mDataBase.rawQuery(query, null);
+
+            WorkoutSet workoutSet=new WorkoutSet();
+
+            while(cursor.moveToNext()){
+                Workout workout = new Workout();
+                workout.setIndex(Integer.parseInt(cursor.getString(0)));
+                workout.setName(cursor.getString(1));
+                workoutSet.add(workout);
+            }
+
+            cursor.close();
+
+            return workoutSet;
+        } catch (SQLException mSQLException) {
+            Log.d("debug", "WorkoutDBHandler.java   "+"findhandler >>" + mSQLException.toString());
+            throw mSQLException;
+        }
+    }
     
 
     //returns number of workouts in workout table

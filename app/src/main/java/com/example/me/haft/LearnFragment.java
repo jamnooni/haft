@@ -1,8 +1,9 @@
 package com.example.me.haft;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,21 @@ public class LearnFragment extends Fragment {
 
         gridView= (GridView) rootView.findViewById(R.id.gridview);
 
+
+        Bundle bundle=getArguments();
+        String[] names=bundle.getStringArray("workoutSets names");
+        int[] iconIds=bundle.getIntArray("workoutSets iconIds");
+        Log.d("debug","names="+names[0]);
+        if (names!=null){
+            setGridViewData(names,iconIds);
+        }
+
         return rootView;
     }
 
+    //sets adapter for the gridView in the fragment's layout and determines the gridView's
+    //OnClickListener.onClick() to run the onGridItemClicked() method of the instance of
+    //OnGridItemClickListener interface if the instance isn't null;
     public void setGridViewData(String[] names,int[] iconIds){
 
         LearnGridAdapter learnGridAdapter=new LearnGridAdapter(getActivity(),names,iconIds);

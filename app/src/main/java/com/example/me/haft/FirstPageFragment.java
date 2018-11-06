@@ -50,7 +50,7 @@ public class FirstPageFragment extends Fragment {
             switch (index){
                 case 1:
                     intent = new Intent(getActivity(), WorkoutActivity.class);
-                    intent.putExtra("workout set", MainActivity.workoutSet);
+                    intent.putExtra("workout set", MainActivity.selectedSet);
                     getActivity().startActivityForResult(intent, 1);
                     break;
                 case 4:

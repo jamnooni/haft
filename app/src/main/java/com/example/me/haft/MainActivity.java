@@ -26,13 +26,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private PagerAdapter mPagerAdapter;
 
-    public static String workoutSet="full body";
+    public static String selectedSet="full body";
     StatsDBHandler statsDBH;
 
     enum DaysOfWeek {Sun,Mon,Tue,Wed,Thu,Fri,Sat}
     Calendar calendar;
     int[] lineChartY=new int[7];
     String[] strDaysOfWeek =new String[7];
+    WorkoutSet workoutSets;
+    Bundle args=new Bundle();
+
 
 
 
@@ -47,6 +50,25 @@ public class MainActivity extends AppCompatActivity {
 
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+
+        //calls workout database
+        WorkoutDBHandler workoutDBH=new WorkoutDBHandler(this,null,null,1);
+        try {
+            workoutDBH.createDataBase();
+            workoutDBH.openDataBase();
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        //call workoutSets and put them in Bundle
+        workoutSets=workoutDBH.getWorkoutSets();
+        String[] names = workoutSets.getNames();
+        int[] iconIds=workoutSets.getIconIds();
+        args.putStringArray("workoutSets names",names);
+        args.putIntArray("workoutsSets iconIds",iconIds);
+
 
 
         Log.d("debug","statspagefragment.java>>"+"create new statsdbhandler");
@@ -87,10 +109,18 @@ public class MainActivity extends AppCompatActivity {
                     //Log.d("debug","mainactivity.java>> new fragment created");
                     return firstPageFragment;
                 case 1:
-                    LearnPageFragment learnPageFragment=new LearnPageFragment();
-                    //learnPageFragment.setArguments(args);
-                    //Log.d("debug","mainactivity.java>> new fragment created");
-                    return learnPageFragment;
+                    LearnFragment learnFragment=new LearnFragment();
+                    learnFragment.setArguments(args);
+                    learnFragment.setItemClickListener(new LearnFragment.OnGridItemClickListener(){
+                        @Override
+                        public void onGridItemClicked(int position) {
+                            Intent intent=new Intent(MainActivity.this
+                                    ,LearnActivity.class);
+                            intent.putExtra("workoutSet_index",position);
+                            MainActivity.this.startActivity(intent);
+                        }
+                    });
+                    return learnFragment;
                 case 2:
                     TrackPageFragment trackPageFragment=new TrackPageFragment();
 

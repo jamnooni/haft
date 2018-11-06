@@ -40,15 +40,11 @@ public class LearnSlideFragment extends Fragment {
         imageView= (ImageView) rootView.findViewById(R.id.image);
 
 
-        setData(title,description,imageId);
-
-
-        return rootView;
-    }
-
-    public void setData(String title,String description,int imageId){
         titleView.setText(title);
         descriptionView.setText(description);
         //imageView.setImageResource(imageId);
+
+
+        return rootView;
     }
 }

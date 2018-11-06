@@ -21,9 +21,10 @@ public class LearnGridAdapter extends BaseAdapter {
 
     public LearnGridAdapter(Context context, String[] names, int[] iconIds) {
         this.names= Arrays.asList(names);
-        for (int i:iconIds){
+        if (iconIds!=null)
+            for (int i:iconIds){
             this.iconIds.add(i);
-        }
+            }
         this.context=context;
     }
 
